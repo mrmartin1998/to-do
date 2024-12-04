@@ -6,6 +6,7 @@ import TodoItem from '@/components/TodoItem';
 import DeadlinePicker from '@/components/DeadlinePicker';
 import useNotifications from '@/hooks/useNotifications';
 import SortControls from '@/components/SortControls';
+import FilterControls from '@/components/FilterControls';
 
 export default function Home() {
   // Use our custom hook to persist todos in localStorage
@@ -15,6 +16,7 @@ export default function Home() {
   const [deadline, setDeadline] = useState(null);
   const [sortBy, setSortBy] = useState('');
   const [isClient, setIsClient] = useState(false);
+  const [filters, setFilters] = useState({ status: 'all', priority: 'all' });
 
   // Only run on client-side
   useEffect(() => {
@@ -55,10 +57,26 @@ export default function Home() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  const getFilteredTodos = () => {
+    return todos.filter(todo => {
+      const statusMatch = 
+        filters.status === 'all' ? true :
+        filters.status === 'completed' ? todo.completed :
+        !todo.completed;
+
+      const priorityMatch = 
+        filters.priority === 'all' ? true :
+        todo.priority === filters.priority;
+
+      return statusMatch && priorityMatch;
+    });
+  };
+
   const getSortedTodos = () => {
-    if (!sortBy) return todos;
+    const filteredTodos = getFilteredTodos();
+    if (!sortBy) return filteredTodos;
     
-    return [...todos].sort((a, b) => {
+    return [...filteredTodos].sort((a, b) => {
       switch (sortBy) {
         case 'priority':
           const priority = { high: 3, medium: 2, low: 1 };
@@ -75,6 +93,10 @@ export default function Home() {
     });
   };
 
+  const handleFilterChange = (type, value) => {
+    setFilters(prev => ({ ...prev, [type]: value }));
+  };
+
   // Only render content on client-side
   if (!isClient) {
     return <div className="min-h-screen p-4">Loading...</div>;
@@ -85,7 +107,10 @@ export default function Home() {
       {/* Header with title and sort controls */}
       <div className="flex justify-between items-center my-6">
         <h1 className="text-3xl font-bold">Todo List</h1>
-        <SortControls onSortChange={setSortBy} />
+        <div className="flex gap-4">
+          <FilterControls onFilterChange={handleFilterChange} />
+          <SortControls onSortChange={setSortBy} />
+        </div>
       </div>
       
       {/* Todo Input Form */}
