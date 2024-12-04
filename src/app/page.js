@@ -105,53 +105,53 @@ export default function Home() {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      {/* Header with title and sort controls */}
-      <div className="flex justify-between items-center my-6">
-        <h1 className="text-3xl font-bold">Todo List</h1>
-        <div className="flex gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center gap-2 mb-4 sm:mb-6">
+        <h1 className="text-lg sm:text-2xl font-bold">Todo List</h1>
+        <div className="flex w-full sm:w-auto justify-center sm:justify-start gap-1 sm:gap-2">
           <FilterControls onFilterChange={handleFilterChange} />
           <SortControls onSortChange={setSortBy} />
         </div>
       </div>
-      
-      {/* Todo Input Form */}
-      <form onSubmit={handleAddTodo} className="flex gap-2 mb-8">
+
+      {/* Input Form */}
+      <form onSubmit={handleAddTodo} className="flex flex-col sm:flex-row gap-2 mb-4 sm:mb-6">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new todo..."
-          className="input input-bordered flex-1"
+          className="input input-bordered h-12 sm:h-auto input-sm sm:input-md flex-1 text-sm w-[300px] sm:w-[400px] mx-auto"
         />
-        <DeadlinePicker
-          deadline={deadline}
-          onChange={setDeadline}
-        />
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          className="select select-bordered"
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <button type="submit" className="btn btn-primary">
-          Add Todo
-        </button>
+        <div className="flex justify-center sm:justify-start gap-1 sm:gap-2">
+          <DeadlinePicker
+            deadline={deadline}
+            onChange={setDeadline}
+            className="h-10 sm:h-auto"
+          />
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="select select-bordered h-10 sm:h-auto select-sm sm:select-md min-w-[80px] sm:min-w-fit text-sm"
+          >
+            <option value="low">Low</option>
+            <option value="medium">{window.innerWidth < 640 ? 'Med' : 'Medium'}</option>
+            <option value="high">High</option>
+          </select>
+          <button type="submit" className="btn btn-primary h-10 sm:h-auto btn-sm sm:btn-md px-3 sm:px-4">
+            Add
+          </button>
+        </div>
       </form>
 
       {/* Todo List */}
-      <AnimatedList
-        items={getSortedTodos()}
-        renderItem={(todo) => (
-          <TodoItem
-            todo={todo}
-            onToggle={handleToggle}
-            onDelete={handleDelete}
-          />
-        )}
-      />
+      <AnimatedList items={getSortedTodos()} renderItem={(todo) => (
+        <TodoItem
+          todo={todo}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+        />
+      )} />
     </div>
   );
 }

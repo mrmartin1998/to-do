@@ -14,40 +14,42 @@ function TodoItem({ todo, onToggle, onDelete }) {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl mb-4 transition-all duration-300 hover:shadow-2xl">
-      <div className="card-body p-4 flex-row items-center gap-4">
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={() => onToggle(todo.id)}
-          className="checkbox checkbox-primary transition-all duration-300"
-        />
-        <div className="flex-1">
-          <h3 className={`text-lg transition-all duration-300 ${
-            todo.completed ? 'line-through opacity-50' : ''
-          }`}>
-            {todo.title}
-          </h3>
-          {todo.deadline && (
-            <p className="text-sm opacity-70">
-              {formatDeadline(todo.deadline)}
-            </p>
-          )}
-        </div>
+    <div className="card bg-base-100 shadow-xl mb-2">
+      <div className="card-body p-2 sm:p-4">
         <div className="flex items-center gap-2">
-          <span className={`badge ${
-            todo.priority === 'high' ? 'badge-error' :
-            todo.priority === 'medium' ? 'badge-warning' :
-            'badge-info'
-          }`}>
-            {todo.priority}
-          </span>
-          <button
-            onClick={() => onDelete(todo.id)}
-            className="btn btn-ghost btn-sm"
-          >
-            ✕
-          </button>
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => onToggle(todo.id)}
+            className="checkbox checkbox-sm sm:checkbox-md checkbox-primary"
+          />
+          <div className="flex-1 min-w-0">
+            <h3 className={`text-sm sm:text-base truncate ${
+              todo.completed ? 'line-through opacity-50' : ''
+            }`}>
+              {todo.title}
+            </h3>
+            {todo.deadline && (
+              <p className="text-xs sm:text-sm opacity-70">
+                {formatDeadline(todo.deadline)}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className={`badge badge-sm sm:badge-md ${
+              todo.priority === 'high' ? 'badge-error' :
+              todo.priority === 'medium' ? 'badge-warning' :
+              'badge-info'
+            }`}>
+              {todo.priority}
+            </span>
+            <button
+              onClick={() => onDelete(todo.id)}
+              className="btn btn-ghost btn-xs sm:btn-sm"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -2,13 +2,13 @@ function SortControls({ onSortChange }) {
   return (
     <select 
       onChange={(e) => onSortChange(e.target.value)}
-      className="select select-bordered w-[200px]"
+      className="select select-bordered select-sm sm:select-md w-[100px] sm:w-[200px]"
       defaultValue=""
     >
-      <option value="">Sort by...</option>
+      <option value="">Sort...</option>
       <option value="priority">Priority</option>
       <option value="deadline">Deadline</option>
-      <option value="created">Created Date</option>
+      <option value="created">Created</option>
     </select>
   );
 }
