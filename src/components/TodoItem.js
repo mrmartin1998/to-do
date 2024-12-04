@@ -14,16 +14,18 @@ function TodoItem({ todo, onToggle, onDelete }) {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl mb-4">
+    <div className="card bg-base-100 shadow-xl mb-4 transition-all duration-300 hover:shadow-2xl">
       <div className="card-body p-4 flex-row items-center gap-4">
         <input
           type="checkbox"
           checked={todo.completed}
           onChange={() => onToggle(todo.id)}
-          className="checkbox checkbox-primary"
+          className="checkbox checkbox-primary transition-all duration-300"
         />
         <div className="flex-1">
-          <h3 className={`text-lg ${todo.completed ? 'line-through opacity-50' : ''}`}>
+          <h3 className={`text-lg transition-all duration-300 ${
+            todo.completed ? 'line-through opacity-50' : ''
+          }`}>
             {todo.title}
           </h3>
           {todo.deadline && (

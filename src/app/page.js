@@ -7,6 +7,7 @@ import DeadlinePicker from '@/components/DeadlinePicker';
 import useNotifications from '@/hooks/useNotifications';
 import SortControls from '@/components/SortControls';
 import FilterControls from '@/components/FilterControls';
+import AnimatedList from '@/components/AnimatedList';
 
 export default function Home() {
   // Use our custom hook to persist todos in localStorage
@@ -141,16 +142,16 @@ export default function Home() {
       </form>
 
       {/* Todo List */}
-      <div className="space-y-4">
-        {getSortedTodos().map(todo => (
+      <AnimatedList
+        items={getSortedTodos()}
+        renderItem={(todo) => (
           <TodoItem
-            key={todo.id}
             todo={todo}
             onToggle={handleToggle}
             onDelete={handleDelete}
           />
-        ))}
-      </div>
+        )}
+      />
     </div>
   );
 }
