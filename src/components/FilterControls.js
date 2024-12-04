@@ -5,7 +5,7 @@ function FilterControls({ onFilterChange }) {
     <div className="flex gap-2">
       <select 
         onChange={(e) => onFilterChange('status', e.target.value)}
-        className="select select-bordered select-sm sm:select-md w-[100px] sm:w-[200px]"
+        className="select select-bordered select-md w-[150px]"
         defaultValue="all"
       >
         <option value="all">Status...</option>
@@ -15,7 +15,7 @@ function FilterControls({ onFilterChange }) {
 
       <select 
         onChange={(e) => onFilterChange('priority', e.target.value)}
-        className="select select-bordered select-sm sm:select-md w-[100px] sm:w-[200px]"
+        className="select select-bordered select-md w-[150px]"
         defaultValue="all"
       >
         <option value="all">Priority...</option>

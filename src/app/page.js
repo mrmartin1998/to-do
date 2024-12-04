@@ -106,39 +106,39 @@ export default function Home() {
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center gap-2 mb-4 sm:mb-6">
-        <h1 className="text-lg sm:text-2xl font-bold">Todo List</h1>
-        <div className="flex w-full sm:w-auto justify-center sm:justify-start gap-1 sm:gap-2">
+      <div className="flex justify-between items-center gap-2 mb-6">
+        <h1 className="text-2xl font-bold">Todo List</h1>
+        <div className="flex gap-2">
           <FilterControls onFilterChange={handleFilterChange} />
           <SortControls onSortChange={setSortBy} />
         </div>
       </div>
 
       {/* Input Form */}
-      <form onSubmit={handleAddTodo} className="flex flex-col sm:flex-row gap-2 mb-4 sm:mb-6">
+      <form onSubmit={handleAddTodo} className="flex gap-2 mb-6">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new todo..."
-          className="input input-bordered h-12 sm:h-auto input-sm sm:input-md flex-1 text-sm w-[300px] sm:w-[400px] mx-auto"
+          className="input input-bordered input-md flex-1 text-sm bg-base-300"
         />
-        <div className="flex justify-center sm:justify-start gap-1 sm:gap-2">
+        <div className="flex gap-2">
           <DeadlinePicker
             deadline={deadline}
             onChange={setDeadline}
-            className="h-10 sm:h-auto"
+            className="bg-base-300"
           />
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
-            className="select select-bordered h-10 sm:h-auto select-sm sm:select-md min-w-[80px] sm:min-w-fit text-sm"
+            className="select select-bordered select-md min-w-[80px] text-sm bg-base-300"
           >
             <option value="low">Low</option>
-            <option value="medium">{window.innerWidth < 640 ? 'Med' : 'Medium'}</option>
+            <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
-          <button type="submit" className="btn btn-primary h-10 sm:h-auto btn-sm sm:btn-md px-3 sm:px-4">
+          <button type="submit" className="btn btn-primary btn-md">
             Add
           </button>
         </div>

@@ -2,7 +2,7 @@ function SortControls({ onSortChange }) {
   return (
     <select 
       onChange={(e) => onSortChange(e.target.value)}
-      className="select select-bordered select-sm sm:select-md w-[100px] sm:w-[200px]"
+      className="select select-bordered select-md w-[150px]"
       defaultValue=""
     >
       <option value="">Sort...</option>

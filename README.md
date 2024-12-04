@@ -11,17 +11,18 @@ A feature-rich todo list application built with [Next.js](https://nextjs.org), o
 - Dark/light mode support with system preference detection
 - Real-time updates and smooth transitions
 - Mobile-friendly design
-- Keyboard shortcuts for common actions
+
 - Deadline functionality with reminders (coming soon)
-- Advanced sorting and filtering capabilities (coming soon)
+- Advanced sorting and filtering capabilities:
   - Sort by priority, deadline, or creation date
   - Filter by status and priority level
   - Search functionality
 
 ## Technical Stack
 
-- Next.js 13 with App Router
-- React Hooks for state management
-- Tailwind CSS for styling
-- DaisyUI for UI components
-- LocalStorage API for data persistence
+- Next.js 13 with App Router for modern React architecture
+- React Hooks for efficient state management
+- Tailwind CSS for responsive and utility-first styling
+- DaisyUI for beautiful, accessible UI components
+- LocalStorage API for client-side data persistence
+

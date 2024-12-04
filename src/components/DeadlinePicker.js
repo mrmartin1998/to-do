@@ -4,7 +4,7 @@ function DeadlinePicker({ deadline, onChange, className = '' }) {
       type="date"
       value={deadline || ''}
       onChange={(e) => onChange(e.target.value)}
-      className={`input input-bordered input-sm sm:input-md ${className}`}
+      className={`input input-bordered input-md ${className}`}
     />
   );
 }
