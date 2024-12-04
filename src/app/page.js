@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import TodoItem from '@/components/TodoItem';
+import DeadlinePicker from '@/components/DeadlinePicker';
 
 export default function Home() {
   // Use our custom hook to persist todos in localStorage
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [newTodo, setNewTodo] = useState('');
   const [priority, setPriority] = useState('medium');
+  const [deadline, setDeadline] = useState(null);
 
   // Function to add a new todo
   const handleAddTodo = (e) => {
@@ -21,11 +23,13 @@ export default function Home() {
       title: newTodo,
       completed: false,
       priority: priority,
+      deadline: deadline,
       createdAt: new Date()
     };
 
     setTodos([...todos, todo]);
     setNewTodo(''); // Clear input after adding
+    setDeadline(null); // Reset deadline after adding
   };
 
   // Function to toggle todo completion
@@ -52,6 +56,10 @@ export default function Home() {
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Add a new todo..."
           className="input input-bordered flex-1"
+        />
+        <DeadlinePicker
+          deadline={deadline}
+          onChange={setDeadline}
         />
         <select
           value={priority}
