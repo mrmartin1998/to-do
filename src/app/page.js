@@ -1,9 +1,11 @@
-'use client';  // This tells Next.js this is a client component
+'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import TodoItem from '@/components/TodoItem';
 import DeadlinePicker from '@/components/DeadlinePicker';
+import useNotifications from '@/hooks/useNotifications';
+import SortControls from '@/components/SortControls';
 
 export default function Home() {
   // Use our custom hook to persist todos in localStorage
@@ -11,25 +13,34 @@ export default function Home() {
   const [newTodo, setNewTodo] = useState('');
   const [priority, setPriority] = useState('medium');
   const [deadline, setDeadline] = useState(null);
+  const [sortBy, setSortBy] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  // Only run on client-side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useNotifications(todos);
 
   // Function to add a new todo
   const handleAddTodo = (e) => {
     e.preventDefault();
     
-    if (!newTodo.trim()) return; // Don't add empty todos
+    if (!newTodo.trim()) return;
     
     const todo = {
-      id: Date.now().toString(), // Simple way to generate unique IDs
+      id: Date.now().toString(),
       title: newTodo,
       completed: false,
       priority: priority,
       deadline: deadline,
-      createdAt: new Date()
+      createdAt: new Date().toISOString() // Convert to string for consistency
     };
 
     setTodos([...todos, todo]);
-    setNewTodo(''); // Clear input after adding
-    setDeadline(null); // Reset deadline after adding
+    setNewTodo('');
+    setDeadline(null);
   };
 
   // Function to toggle todo completion
@@ -44,9 +55,38 @@ export default function Home() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  const getSortedTodos = () => {
+    if (!sortBy) return todos;
+    
+    return [...todos].sort((a, b) => {
+      switch (sortBy) {
+        case 'priority':
+          const priority = { high: 3, medium: 2, low: 1 };
+          return priority[b.priority] - priority[a.priority];
+        case 'deadline':
+          if (!a.deadline) return 1;
+          if (!b.deadline) return -1;
+          return new Date(a.deadline) - new Date(b.deadline);
+        case 'created':
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        default:
+          return 0;
+      }
+    });
+  };
+
+  // Only render content on client-side
+  if (!isClient) {
+    return <div className="min-h-screen p-4">Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-center my-8">Todo List</h1>
+      <h1 className="text-3xl font-bold text-center my-6">Todo List</h1>
+
+      <div className="flex justify-center mb-4">
+        <SortControls onSortChange={setSortBy} />
+      </div>
       
       {/* Todo Input Form */}
       <form onSubmit={handleAddTodo} className="flex gap-2 mb-8">
@@ -75,9 +115,11 @@ export default function Home() {
         </button>
       </form>
 
+      
+      
       {/* Todo List */}
       <div className="space-y-4">
-        {todos.map(todo => (
+        {getSortedTodos().map(todo => (
           <TodoItem
             key={todo.id}
             todo={todo}
