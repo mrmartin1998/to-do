@@ -82,9 +82,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-center my-6">Todo List</h1>
-
-      <div className="flex justify-center mb-4">
+      {/* Header with title and sort controls */}
+      <div className="flex justify-between items-center my-6">
+        <h1 className="text-3xl font-bold">Todo List</h1>
         <SortControls onSortChange={setSortBy} />
       </div>
       
@@ -115,8 +115,6 @@ export default function Home() {
         </button>
       </form>
 
-      
-      
       {/* Todo List */}
       <div className="space-y-4">
         {getSortedTodos().map(todo => (
