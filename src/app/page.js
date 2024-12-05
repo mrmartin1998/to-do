@@ -24,7 +24,7 @@ export default function Home() {
     setIsClient(true);
   }, []);
 
-  useNotifications(todos);
+  const { testNotification, simpleTest } = useNotifications(todos);
 
   // Function to add a new todo
   const handleAddTodo = (e) => {
@@ -111,6 +111,7 @@ export default function Home() {
         <div className="flex gap-2">
           <FilterControls onFilterChange={handleFilterChange} />
           <SortControls onSortChange={setSortBy} />
+          
         </div>
       </div>
 
@@ -152,6 +153,13 @@ export default function Home() {
           onDelete={handleDelete}
         />
       )} />
+
+      <button 
+        onClick={simpleTest}
+        className="btn btn-primary"
+      >
+        Test Simple Notification
+      </button>
     </div>
   );
 }
