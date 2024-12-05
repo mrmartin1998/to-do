@@ -1,6 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 function useNotifications(todos) {
+  // Keep track of sent notifications
+  const sentNotifications = useRef(new Set());
+
   const simpleTest = useCallback(async () => {
     try {
       if (!("Notification" in window)) {
@@ -40,28 +43,43 @@ function useNotifications(todos) {
         const now = new Date();
         const timeUntilDeadline = deadline.getTime() - now.getTime();
         
-        // Notify for tasks:
-        // - Due in 24 hours
-        // - Due in 1 hour
-        // - Just overdue
-        if (
-          (timeUntilDeadline > 0 && timeUntilDeadline <= 60 * 60 * 1000) || // 1 hour
-          (timeUntilDeadline > 0 && timeUntilDeadline <= 24 * 60 * 60 * 1000) || // 24 hours
-          (timeUntilDeadline < 0 && timeUntilDeadline > -60 * 1000) // Just overdue
-        ) {
-          const message = timeUntilDeadline < 0
-            ? `Task "${todo.title}" is now overdue!`
-            : timeUntilDeadline <= 60 * 60 * 1000
-            ? `Task "${todo.title}" is due in less than an hour!`
-            : `Task "${todo.title}" is due in less than 24 hours!`;
+        // Create unique notification keys for different time thresholds
+        const notificationKeys = {
+          hour: `${todo.id}-hour`,
+          day: `${todo.id}-day`,
+          overdue: `${todo.id}-overdue`
+        };
 
+        if (timeUntilDeadline > 0 && timeUntilDeadline <= 60 * 60 * 1000 && !sentNotifications.current.has(notificationKeys.hour)) {
+          // 1 hour notification
           new Notification('Todo Deadline Alert', {
-            body: message,
+            body: `Task "${todo.title}" is due in less than an hour!`,
             icon: '/favicon.ico',
             badge: '/favicon.ico',
             tag: `deadline-${todo.id}`,
             requireInteraction: true
           });
+          sentNotifications.current.add(notificationKeys.hour);
+        } else if (timeUntilDeadline > 0 && timeUntilDeadline <= 24 * 60 * 60 * 1000 && !sentNotifications.current.has(notificationKeys.day)) {
+          // 24 hours notification
+          new Notification('Todo Deadline Alert', {
+            body: `Task "${todo.title}" is due in less than 24 hours!`,
+            icon: '/favicon.ico',
+            badge: '/favicon.ico',
+            tag: `deadline-${todo.id}`,
+            requireInteraction: true
+          });
+          sentNotifications.current.add(notificationKeys.day);
+        } else if (timeUntilDeadline < 0 && timeUntilDeadline > -60 * 1000 && !sentNotifications.current.has(notificationKeys.overdue)) {
+          // Just overdue notification
+          new Notification('Todo Deadline Alert', {
+            body: `Task "${todo.title}" is now overdue!`,
+            icon: '/favicon.ico',
+            badge: '/favicon.ico',
+            tag: `deadline-${todo.id}`,
+            requireInteraction: true
+          });
+          sentNotifications.current.add(notificationKeys.overdue);
         }
       });
     };
@@ -72,7 +90,11 @@ function useNotifications(todos) {
     // Initial check
     checkDeadlines();
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      // Clear sent notifications when component unmounts
+      sentNotifications.current.clear();
+    };
   }, [todos]);
 
   return { simpleTest };
